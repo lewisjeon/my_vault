@@ -1,0 +1,39 @@
+# === General ===
+.DS_Store
+Thumbs.db
+*.log
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*.sqlite3
+.env
+.venv/
+*.egg-info/
+instance/
+
+# === Alembic ===
+alembic/versions/
+
+# === Node / Frontend ===
+frontend/node_modules/
+frontend/.env
+frontend/dist/
+frontend/.vite/
+
+# === Docker ===
+*.pid
+*.pid.lock
+
+# === VSCode ===
+.vscode/
+
+# === macOS / Linux / Windows ===
+*.swp
+*.swo
+*.bak
+*.tmp
+*.orig
+
+# === React Dev Cache ===
+frontend/.parcel-cache/

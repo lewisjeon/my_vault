@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  fastapi:
+    build:
+      context: backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      WAIT_HOSTS: postgres:5432
+      WAIT_BEFORE: 3
+      WAIT_TIMEOUT: 30
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:17
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: vault
+      POSTGRES_PASSWORD: vault
+      POSTGRES_DB: my_vault
+
+  frontend:
+    image: node:lts-bullseye
+    command: /bin/bash -c "chmod +x run.sh && ./run.sh"
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "5173:5173"
+    environment:
+      REACT_APP_API_HOST: ${REACT_APP_API_HOST}

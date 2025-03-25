@@ -1,0 +1,21 @@
+# Use Python 3.11 base with Debian bullseye for stability
+FROM python:3.11-bullseye
+
+# Update pip
+RUN python -m pip install --upgrade pip
+
+# Add docker-compose-wait for DB readiness
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait /wait
+RUN chmod +x /wait
+
+# Separate layer for dependencies to benefit from caching
+WORKDIR /deps
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+
+# Move into the working directory for the app
+WORKDIR /app
+COPY . .
+
+# Run Alembic migrations before starting FastAPI
+CMD /wait && alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
